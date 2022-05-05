@@ -1,0 +1,5 @@
+<launch>
+  <include file="$(find-pkg-share romea_mobile_base_description)/launch/view_robot.launch.xml">
+    <arg name="urdf_file" value="$(find-pkg-share robucar_description)/urdf/robucar.urdf.xacro"/>
+  </include>
+</launch>

@@ -1,0 +1,9 @@
+<library path="robucar_hardware">
+  <class name="robucar_hardware/RobucarHardware"
+         type="romea::RobucarHardware"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Robucar hardware interface
+    </description>
+  </class>
+</library>

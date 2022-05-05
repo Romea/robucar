@@ -1,0 +1,10 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 10  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    mobile_base_controller:
+      type: romea_mobile_base_controllers/MobileBaseController2AS4WD
+
