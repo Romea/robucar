@@ -1,12 +1,12 @@
 # 1 Overview #
 
-This package contains the description of fat and slim adap2e robots
+This package contains the description of fat and slim robucar robots
 
 # 2 Package organization #
 
 This package is organized into subdirectories as follows:
 
-  - urdf/ contains (xacro representations of) urdf descriptions of fat and slim adap2e robots.
+  - urdf/ contains (xacro representations of) urdf descriptions of robucar robot.
 
   - config/ contains characteristic of each robot:
 

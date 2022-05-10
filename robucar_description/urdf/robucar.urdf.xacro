@@ -5,8 +5,8 @@
   <xacro:arg name="mode" default="simulation" />
   <xacro:arg name="controller_conf_yaml_file" default=""/>
 
-  <xacro:include filename="$(find adap2e_description)/urdf/robucar.xacro" />
-  <xacro:adap2e model="slim" mode="$(arg mode)" prefix="$(arg prefix)"/>
+  <xacro:include filename="$(find robucar_description)/urdf/robucar.xacro" />
+  <xacro:robucar mode="$(arg mode)" prefix="$(arg prefix)"/>
 
   <gazebo>
     <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">

@@ -21,7 +21,7 @@ def generate_launch_description():
     controller_manager_yaml_file = get_package_share_directory("robucar_bringup") + "/config/controller_manager.yaml"
 
     print(controller_manager_yaml_file)
-    mobile_base_controller_yaml_file = get_package_share_directory("aroco_bringup") + "/config/mobile_base_controller_fat.yaml"
+    mobile_base_controller_yaml_file = get_package_share_directory("aroco_bringup") + "/config/mobile_base_controller.yaml"
 
     # Get URDF via xacro
     robot_description_content = Command(
