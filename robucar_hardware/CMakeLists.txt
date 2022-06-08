@@ -28,6 +28,10 @@ add_library(
   ${PROJECT_NAME}
   SHARED
   src/robucar_hardware.cpp
+  src/communication/framepure.cpp
+  src/communication/pure_client.cpp
+  src/communication/pure_devices.cpp
+  src/communication/pure_interface.cpp
 )
 target_include_directories(
   ${PROJECT_NAME}
