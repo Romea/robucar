@@ -224,7 +224,7 @@ def generate_launch_description():
     declared_arguments.append(DeclareLaunchArgument("mode", default_value="simulation"))
 
     declared_arguments.append(
-        DeclareLaunchArgument("robot_namespace", default_value="aroco")
+        DeclareLaunchArgument("robot_namespace", default_value="robufast")
     )
 
     declared_arguments.append(

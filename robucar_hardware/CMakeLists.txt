@@ -21,7 +21,10 @@ find_package(romea_core_mobile_base REQUIRED)
 find_package(romea_common_utils REQUIRED)
 find_package(romea_mobile_base_utils REQUIRED)
 find_package(romea_mobile_base_hardware REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system)
 
+#Disable debug
+#add_definitions(-DNDEBUG)
 
 ## COMPILE
 add_library(
@@ -50,6 +53,9 @@ ament_target_dependencies(
   romea_mobile_base_utils
   romea_mobile_base_hardware
 )
+
+
+target_link_libraries(${PROJECT_NAME} boost_thread)
 
 # Causes the visibility macros to use dllexport rather than dllimport,
 # which is appropriate when building the dll but not consuming it.
