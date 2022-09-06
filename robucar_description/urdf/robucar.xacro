@@ -40,6 +40,9 @@
     <xacro:property name="aabb_length" value="${props['geometry']['aabb']['length']}" />
     <xacro:property name="aabb_width" value="${props['geometry']['aabb']['width']}" />
     <xacro:property name="aabb_height" value="${props['geometry']['aabb']['height']}" />
+    <xacro:property name="aabb_center_x" value="${props['geometry']['aabb']['center'][0]}" />
+    <xacro:property name="aabb_center_y" value="${props['geometry']['aabb']['center'][1]}" />
+    <xacro:property name="aabb_center_z" value="${props['geometry']['aabb']['center'][2]}" />
 
     <xacro:property name="wheelbase" value="${props['geometry']['axles_distance']}"/>
     <xacro:property name="front_track" value="${props['geometry']['front_axle']['wheels_distance']}"/>
