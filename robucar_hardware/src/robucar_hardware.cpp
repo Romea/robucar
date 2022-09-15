@@ -4,8 +4,8 @@
 #include <rclcpp/rclcpp.hpp>
 
 namespace  {
-const double WHEEL_SPEED_EPSILON =0.01;
-const double WHEEL_ANGLE_EPSILON =0.03;
+const double WHEEL_LINEAR_SPEED_EPSILON =0.01;
+const double WHEEL_STEERING_ANGLE_EPSILON =0.03;
 }
 
 using namespace robucar_communication;
@@ -59,36 +59,24 @@ hardware_interface::return_type RobucarHardware::read()
       FramePureDrive frame_pure(message->dataBuffer, message->dataLength);
       frame_pure.decode();
 
-      front_steering_angle_measure_ = -frame_pure.
+      front_axle_steering_angle_measure_ = -frame_pure.
           getMotorState(FramePureDrive::FS)->getPosition();
-      rear_steering_angle_measure_ = frame_pure.
+      rear_axle_steering_angle_measure_ = frame_pure.
           getMotorState(FramePureDrive::RS)->getPosition(); /// + pour Robucar, - pour Aroco; pour l'angle de braquage arrière
 
-      front_left_wheel_speed_measure_ = frame_pure.
+      front_left_wheel_linear_speed_measure_ = frame_pure.
           getMotorState(FramePureDrive::FL)->getSpeed();
-      front_right_wheel_speed_measure_ = frame_pure.
+      front_right_wheel_linear_speed_measure_ = frame_pure.
           getMotorState(FramePureDrive::FR)->getSpeed();
-      rear_left_wheel_speed_measure_ = frame_pure.
+      rear_left_wheel_linear_speed_measure_ = frame_pure.
           getMotorState(FramePureDrive::RL)->getSpeed();
-      rear_right_wheel_speed_measure_ = frame_pure.
+      rear_right_wheel_linear_speed_measure_ = frame_pure.
           getMotorState(FramePureDrive::RR)->getSpeed();
 
-      hardware_interface_->front_axle_steering_joint.
-          feedback.set(front_steering_angle_measure_);
-      hardware_interface_->rear_axle_steering_joint.
-          feedback.set(rear_steering_angle_measure_);
+      set_hardware_state_();
 
-      hardware_interface_->front_left_wheel_spinning_joint.feedback.
-          velocity.set(front_left_wheel_speed_measure_/front_wheel_radius_);
-      hardware_interface_->front_right_wheel_spinning_joint.feedback.
-          velocity.set(front_right_wheel_speed_measure_/front_wheel_radius_);
-      hardware_interface_->rear_left_wheel_spinning_joint.feedback.
-          velocity.set(rear_left_wheel_speed_measure_/rear_wheel_radius_);
-      hardware_interface_->rear_right_wheel_spinning_joint.feedback.
-          velocity.set(rear_right_wheel_speed_measure_/rear_wheel_radius_);
-
-      std::cout <<"angles measures"<< front_steering_angle_measure_ <<" "<<rear_steering_angle_measure_<<std::endl;
-      std::cout <<"speeds measures"<< front_left_wheel_speed_measure_ <<" "<<front_right_wheel_speed_measure_<<" "<<rear_left_wheel_speed_measure_ <<" "<<rear_right_wheel_speed_measure_<<std::endl;
+      std::cout <<"angles measures"<< front_axle_steering_angle_measure_ <<" "<<rear_axle_steering_angle_measure_<<std::endl;
+      std::cout <<"speeds measures"<< front_left_wheel_linear_speed_measure_ <<" "<<front_right_wheel_linear_speed_measure_<<" "<<rear_left_wheel_linear_speed_measure_ <<" "<<rear_right_wheel_linear_speed_measure_<<std::endl;
 
     }
     else
@@ -109,32 +97,18 @@ hardware_interface::return_type RobucarHardware::write()
 {
   RCLCPP_INFO(rclcpp::get_logger("RobucarHardware"), "Send command to robot");
 
-  front_steering_angle_command_ =hardware_interface_->
-      front_axle_steering_joint.command.get();
-  rear_steering_angle_command_ =hardware_interface_->
-      rear_axle_steering_joint.command.get();
-
-  front_left_wheel_speed_command_ =hardware_interface_->
-      front_left_wheel_spinning_joint.command.get()*front_wheel_radius_;
-  front_right_wheel_speed_command_ =hardware_interface_->
-      front_right_wheel_spinning_joint.command.get()*front_wheel_radius_;
-  rear_left_wheel_speed_command_ =hardware_interface_->
-      rear_left_wheel_spinning_joint.command.get()*rear_wheel_radius_;
-  rear_right_wheel_speed_command_ =hardware_interface_->
-      rear_right_wheel_spinning_joint.command.get()*rear_wheel_radius_;
-
-
-  std::cout <<"angles command"<< front_steering_angle_command_ <<" "<<rear_steering_angle_command_<<std::endl;
-  std::cout <<"speeds command"<< front_left_wheel_speed_command_ <<" "<<front_right_wheel_speed_command_<<" "<<rear_left_wheel_speed_command_ <<" "<<rear_right_wheel_speed_command_<<std::endl;
+  get_hardware_command_();
+  std::cout <<"angles command"<< front_axle_steering_angle_command_ <<" "<<rear_axle_steering_angle_command_<<std::endl;
+  std::cout <<"speeds command"<< front_left_wheel_linear_speed_command_ <<" "<<front_right_wheel_linear_speed_command_<<" "<<rear_left_wheel_linear_speed_command_ <<" "<<rear_right_wheel_linear_speed_command_<<std::endl;
   std::cout <<" is_drive_enable()"  << is_drive_enable() << std::endl;
 
   CommandPureDrive drive(is_drive_enable());
-  drive.setFrontSteering(front_steering_angle_command_);
-  drive.setRearSteering(rear_steering_angle_command_);
-  drive.setSpeedFL(front_left_wheel_speed_command_);
-  drive.setSpeedFR(front_right_wheel_speed_command_);
-  drive.setSpeedRL(rear_left_wheel_speed_command_);
-  drive.setSpeedRR(rear_right_wheel_speed_command_);
+  drive.setFrontSteering(front_axle_steering_angle_command_);
+  drive.setRearSteering(rear_axle_steering_angle_command_);
+  drive.setSpeedFL(front_left_wheel_linear_speed_command_);
+  drive.setSpeedFR(front_right_wheel_linear_speed_command_);
+  drive.setSpeedRL(rear_left_wheel_linear_speed_command_);
+  drive.setSpeedRR(rear_right_wheel_linear_speed_command_);
 
   uint8_t buffer[512];
   size_t len = drive.toBuffer(buffer);
@@ -148,25 +122,63 @@ hardware_interface::return_type RobucarHardware::write()
 }
 
 //-----------------------------------------------------------------------------
+void RobucarHardware::get_hardware_command_()
+{
+  HardwareCommand2AS4WD command = hardware_interface_->get_command();
+
+  front_axle_steering_angle_command_ = command.frontAxleSteeringAngle;
+  rear_axle_steering_angle_command_ = command.frontAxleSteeringAngle;
+
+  front_left_wheel_linear_speed_command_ =
+      command.frontLeftWheelSpinningSetPoint*front_wheel_radius_;
+  front_right_wheel_linear_speed_command_ =
+      command.frontRightWheelSpinningSetPoint*front_wheel_radius_;
+  rear_left_wheel_linear_speed_command_ =
+      command.rearLeftWheelSpinningSetPoint*rear_wheel_radius_;
+  rear_right_wheel_linear_speed_command_ =
+      command.rearRightWheelSpinningSetPoint*rear_wheel_radius_;
+}
+
+//-----------------------------------------------------------------------------
+void RobucarHardware::set_hardware_state_()
+{
+  HardwareState2AS4WD state;
+
+  state.frontAxleSteeringAngle = front_axle_steering_angle_measure_;
+  state.rearAxleSteeringAngle = rear_axle_steering_angle_measure_;
+
+  state.frontLeftWheelSpinningMotion.velocity =
+      front_left_wheel_linear_speed_measure_/front_wheel_radius_;
+  state.frontRightWheelSpinningMotion.velocity =
+      front_right_wheel_linear_speed_measure_/front_wheel_radius_;
+  state.rearLeftWheelSpinningMotion.velocity =
+      rear_left_wheel_linear_speed_measure_/rear_wheel_radius_;
+  state.frontRightWheelSpinningMotion.velocity =
+      rear_right_wheel_linear_speed_measure_/rear_wheel_radius_;
+
+  hardware_interface_->set_state(state);
+}
+
+//-----------------------------------------------------------------------------
 bool RobucarHardware::is_drive_enable() const
 {
 
-  float speed_measure = 0.25*(front_left_wheel_speed_measure_+
-                              front_right_wheel_speed_measure_+
-                              rear_left_wheel_speed_measure_+
-                              rear_right_wheel_speed_measure_);
+  float speed_measure = 0.25*(front_left_wheel_linear_speed_measure_+
+                              front_right_wheel_linear_speed_measure_+
+                              rear_left_wheel_linear_speed_measure_+
+                              rear_right_wheel_linear_speed_measure_);
 
-  float speed_command = 0.25*(front_left_wheel_speed_command_+
-                              front_right_wheel_speed_command_+
-                              rear_left_wheel_speed_command_+
-                              rear_right_wheel_speed_command_);
+  float speed_command = 0.25*(front_left_wheel_linear_speed_command_+
+                              front_right_wheel_linear_speed_command_+
+                              rear_left_wheel_linear_speed_command_+
+                              rear_right_wheel_linear_speed_command_);
 
-  return !(std::abs(front_steering_angle_measure_)< WHEEL_ANGLE_EPSILON &&
-           std::abs(front_steering_angle_command_)< WHEEL_ANGLE_EPSILON &&
-           std::abs(rear_steering_angle_measure_)< WHEEL_ANGLE_EPSILON &&
-           std::abs(rear_steering_angle_command_)< WHEEL_ANGLE_EPSILON &&
-           std::abs(speed_measure) < WHEEL_SPEED_EPSILON &&
-           std::abs(speed_command) < WHEEL_SPEED_EPSILON);
+  return !(std::abs(front_axle_steering_angle_measure_)< WHEEL_STEERING_ANGLE_EPSILON &&
+           std::abs(front_axle_steering_angle_command_)< WHEEL_STEERING_ANGLE_EPSILON &&
+           std::abs(rear_axle_steering_angle_measure_)< WHEEL_STEERING_ANGLE_EPSILON &&
+           std::abs(rear_axle_steering_angle_command_)< WHEEL_STEERING_ANGLE_EPSILON &&
+           std::abs(speed_measure) < WHEEL_LINEAR_SPEED_EPSILON &&
+           std::abs(speed_command) < WHEEL_LINEAR_SPEED_EPSILON);
 
 }
 
@@ -257,12 +269,12 @@ void RobucarHardware::write_log_data_()
 
     debug_file_ << std::setprecision(10);
     debug_file_ << now_ns.time_since_epoch().count()<<" ";
-    debug_file_ <<front_left_wheel_speed_measure_<<" "<< front_right_wheel_speed_measure_<<" ";
-    debug_file_ <<rear_left_wheel_speed_measure_<<" "<< rear_right_wheel_speed_measure_<<" ";
-    debug_file_ <<front_steering_angle_measure_<<" "<< rear_steering_angle_measure_<<" ";
-    debug_file_ <<front_left_wheel_speed_command_<<" "<< front_right_wheel_speed_command_<<" ";
-    debug_file_ <<rear_left_wheel_speed_command_<<" "<< rear_right_wheel_speed_command_<<" ";
-    debug_file_ <<front_steering_angle_command_<<" "<< rear_steering_angle_command_<<" /n";
+    debug_file_ <<front_left_wheel_linear_speed_measure_<<" "<< front_right_wheel_linear_speed_measure_<<" ";
+    debug_file_ <<rear_left_wheel_linear_speed_measure_<<" "<< rear_right_wheel_linear_speed_measure_<<" ";
+    debug_file_ <<front_axle_steering_angle_measure_<<" "<< rear_axle_steering_angle_measure_<<" ";
+    debug_file_ <<front_left_wheel_linear_speed_command_<<" "<< front_right_wheel_linear_speed_command_<<" ";
+    debug_file_ <<rear_left_wheel_linear_speed_command_<<" "<< rear_right_wheel_linear_speed_command_<<" ";
+    debug_file_ <<front_axle_steering_angle_command_<<" "<< rear_axle_steering_angle_command_<<" /n";
   }
 }
 #endif

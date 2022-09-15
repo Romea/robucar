@@ -35,6 +35,10 @@ private:
 
   bool is_drive_enable() const;
 
+  void get_hardware_command_();
+
+  void set_hardware_state_();
+
 #ifndef NDEBUG
   void open_log_file_();
   void write_log_header_();
@@ -51,19 +55,19 @@ private:
   double front_wheel_radius_;
   double rear_wheel_radius_;
 
-  double front_steering_angle_measure_;
-  double rear_steering_angle_measure_;
-  double front_left_wheel_speed_measure_;
-  double front_right_wheel_speed_measure_;
-  double rear_left_wheel_speed_measure_;
-  double rear_right_wheel_speed_measure_;
+  double front_axle_steering_angle_measure_;
+  double rear_axle_steering_angle_measure_;
+  double front_left_wheel_linear_speed_measure_;
+  double front_right_wheel_linear_speed_measure_;
+  double rear_left_wheel_linear_speed_measure_;
+  double rear_right_wheel_linear_speed_measure_;
 
-  double front_steering_angle_command_;
-  double rear_steering_angle_command_;
-  double front_left_wheel_speed_command_;
-  double front_right_wheel_speed_command_;
-  double rear_left_wheel_speed_command_;
-  double rear_right_wheel_speed_command_;
+  double front_axle_steering_angle_command_;
+  double rear_axle_steering_angle_command_;
+  double front_left_wheel_linear_speed_command_;
+  double front_right_wheel_linear_speed_command_;
+  double rear_left_wheel_linear_speed_command_;
+  double rear_right_wheel_linear_speed_command_;
 
 #ifndef NDEBUG
   std::fstream debug_file_;
