@@ -23,7 +23,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch_ros.actions import Node, SetParameter, PushRosNamespace
 
-from launch_ros.substitutions import FindPackageShare
+from launch_ros.substitutions import FindPackageShare, ExecutableInPackage
 
 from ament_index_python.packages import get_package_share_directory
 
@@ -36,6 +36,7 @@ def launch_setup(context, *args, **kwargs):
     robot_namespace = LaunchConfiguration("robot_namespace").perform(context)
     joystick_type = LaunchConfiguration("joystick_type").perform(context)
     launch_gazebo = LaunchConfiguration("launch_gazebo").perform(context)
+    urdf_description = LaunchConfiguration("urdf_description").perform(context)
 
     if robot_namespace:
         robot_description_name = "/" + robot_namespace + "/robot_description"
@@ -50,8 +51,7 @@ def launch_setup(context, *args, **kwargs):
     use_sim_time = (mode == "simulation") or (mode == "replay")
 
     base_description_yaml_file = (
-        get_package_share_directory("robucar_description")
-        + "/config/robucar.yaml"
+        get_package_share_directory("robucar_description") + "/config/robucar.yaml"
     )
 
     joystick_remapping_yaml_file = (
@@ -71,12 +71,6 @@ def launch_setup(context, *args, **kwargs):
         + "/config/mobile_base_controller.yaml"
     )
 
-    xacro_file = (
-        get_package_share_directory("robucar_description")
-        + "/urdf/robucar.urdf.xacro"
-    )
-
-
     command_message_type = "romea_mobile_base_msgs/TwoAxleSteeringCommand"
     command_message_priority = 100
 
@@ -92,22 +86,7 @@ def launch_setup(context, *args, **kwargs):
         condition=IfCondition(str(launch_gazebo)),
     )
 
-    # Get URDF via xacro
-    robot_description_content = Command(
-        [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            xacro_file,
-            " prefix:=",
-            joints_prefix,
-            " mode:=",
-            mode,
-            " controller_conf_yaml_file:=",
-            controller_manager_yaml_file,
-        ]
-    )
-
-    robot_description = {"robot_description": robot_description_content}
+    robot_description = {"robot_description": urdf_description}
 
     robot_state_publisher = Node(
         package="robot_state_publisher",
@@ -152,15 +131,14 @@ def launch_setup(context, *args, **kwargs):
             ]
         ),
         launch_arguments={
-            "joints_prefix" : joints_prefix,
-            "controller_name" : "mobile_base_controller",
-            "controller_manager_name" : controller_manager_name,
-            "base_description_yaml_filename" : base_description_yaml_file,
-            "base_controller_yaml_filename" : base_controller_yaml_file,
+            "joints_prefix": joints_prefix,
+            "controller_name": "mobile_base_controller",
+            "controller_manager_name": controller_manager_name,
+            "base_description_yaml_filename": base_description_yaml_file,
+            "base_controller_yaml_filename": base_controller_yaml_file,
         }.items(),
         condition=LaunchConfigurationNotEquals("mode", "replay"),
     )
-
 
     joy = Node(
         condition=LaunchConfigurationNotEquals("mode", "replay"),
@@ -217,6 +195,7 @@ def launch_setup(context, *args, **kwargs):
         ),
     ]
 
+
 def generate_launch_description():
 
     declared_arguments = []
@@ -233,6 +212,20 @@ def generate_launch_description():
 
     declared_arguments.append(
         DeclareLaunchArgument("launch_gazebo", default_value="True")
+    )
+
+    urdf_description = Command(
+        [
+            ExecutableInPackage("robucar_description.py", "robucar_bringup"),
+            " robot_namespace:",
+            LaunchConfiguration("robot_namespace"),
+            " mode:",
+            LaunchConfiguration("mode"),
+        ]
+    )
+
+    declared_arguments.append(
+        DeclareLaunchArgument("urdf_description", default_value=urdf_description)
     )
 
     return LaunchDescription(
