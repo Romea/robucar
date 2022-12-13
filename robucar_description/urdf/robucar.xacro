@@ -5,7 +5,7 @@
   <xacro:include filename="$(find romea_mobile_base_description)/ros2_control/base2AS4WD.ros2_control.xacro"/>
 
   <xacro:property name="conf" value="$(find robucar_description)/config/robucar.yaml" />
-  <xacro:property name="props" value="${load_yaml(conf)['/**']['ros__parameters']['base_info']}" />
+  <xacro:property name="props" value="${load_yaml(conf)}" />
 
   <!-- Link names -->
   <xacro:property name="base_link" value="${props['links']['base_link_name']}" />
