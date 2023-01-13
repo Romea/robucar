@@ -1,4 +1,5 @@
-kinematic: two_axle_steering
+# kinematic: two_axle_steering
+type: 2AS4WD
 geometry:
   axles_distance: 1.2
   front_axle:

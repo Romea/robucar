@@ -1,12 +1,23 @@
-#ifndef ROBUCAR_HARDWARE_HPP_
-#define ROBUCAR_HARDWARE_HPP_
+// Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+// Add license
 
-#include "romea_mobile_base_hardware/hardware_system_interface.hpp"
-#include "communication/pure_client.hpp"
+#ifndef ROBUCAR_HARDWARE__ROBUCAR_HARDWARE_HPP_
+#define ROBUCAR_HARDWARE__ROBUCAR_HARDWARE_HPP_
 
+// romea
+#include <romea_mobile_base_hardware/hardware_system_interface.hpp>
+
+// ros
 #include <rclcpp/macros.hpp>
 
+
+// std
 #include <fstream>
+#include <string>
+
+// local
+#include "communication/pure_client.hpp"
+
 
 namespace romea
 {
@@ -14,7 +25,6 @@ namespace romea
 class RobucarHardware : public HardwareSystemInterface2AS4WD
 {
 public:
-
   RCLCPP_SHARED_PTR_DEFINITIONS(RobucarHardware);
 
   RobucarHardware();
@@ -23,15 +33,13 @@ public:
 
   hardware_interface::return_type write() override;
 
-
 private:
-
   hardware_interface::return_type connect_() override;
 
   hardware_interface::return_type disconnect_() override;
 
   hardware_interface::return_type load_info_(
-      const hardware_interface::HardwareInfo & hardware_info) override ;
+    const hardware_interface::HardwareInfo & hardware_info) override;
 
   bool is_drive_enable() const;
 
@@ -46,10 +54,9 @@ private:
 #endif
 
 private:
-
   std::string robot_ip_;
-  robucar_communication::PureClient& pure_client_;
-  robucar_communication::NotificationEntry* notifier_;
+  robucar_communication::PureClient & pure_client_;
+  robucar_communication::NotificationEntry * notifier_;
   const uint16_t pure_target_;
 
   double front_wheel_radius_;
@@ -74,6 +81,6 @@ private:
 #endif
 };
 
-}
+}  // namespace romea
 
-#endif
+#endif  // ROBUCAR_HARDWARE__ROBUCAR_HARDWARE_HPP_

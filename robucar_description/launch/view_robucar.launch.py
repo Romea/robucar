@@ -1,3 +1,6 @@
+# Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+# Add license
+
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource

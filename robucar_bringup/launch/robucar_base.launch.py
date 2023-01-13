@@ -1,3 +1,6 @@
+# Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+# Add license
+
 from launch import LaunchDescription
 
 from launch.actions import (
@@ -7,20 +10,14 @@ from launch.actions import (
     GroupAction,
 )
 from launch.conditions import (
-    IfCondition,
     LaunchConfigurationEquals,
     LaunchConfigurationNotEquals,
 )
-from launch.substitutions import (
-    Command,
-    PathJoinSubstitution,
-    LaunchConfiguration,
-)
+from launch.substitutions import Command, PathJoinSubstitution, LaunchConfiguration
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node, SetParameter, PushRosNamespace
 from launch_ros.substitutions import FindPackageShare, ExecutableInPackage
 from ament_index_python.packages import get_package_share_directory
-
 
 
 def launch_setup(context, *args, **kwargs):
@@ -130,7 +127,7 @@ def launch_setup(context, *args, **kwargs):
                 # teleop,
                 cmd_mux,
             ]
-        ),
+        )
     ]
 
 
