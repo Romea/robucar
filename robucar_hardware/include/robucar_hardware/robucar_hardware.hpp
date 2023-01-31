@@ -4,16 +4,17 @@
 #ifndef ROBUCAR_HARDWARE__ROBUCAR_HARDWARE_HPP_
 #define ROBUCAR_HARDWARE__ROBUCAR_HARDWARE_HPP_
 
-// romea
-#include <romea_mobile_base_hardware/hardware_system_interface.hpp>
-
-// ros
-#include <rclcpp/macros.hpp>
-
 
 // std
 #include <fstream>
 #include <string>
+
+// romea
+#include "romea_common_utils/ros_versions.hpp"
+#include "romea_mobile_base_hardware/hardware_system_interface.hpp"
+
+// ros
+#include "rclcpp/macros.hpp"
 
 // local
 #include "communication/pure_client.hpp"
@@ -29,9 +30,19 @@ public:
 
   RobucarHardware();
 
-  hardware_interface::return_type read() override;
+  #if ROS_DISTRO == ROS_GALACTIC
+  hardware_interface::return_type read()override;
 
-  hardware_interface::return_type write() override;
+  hardware_interface::return_type write()override;
+#else
+  hardware_interface::return_type read(
+    const rclcpp::Time & time,
+    const rclcpp::Duration & period)override;
+
+  hardware_interface::return_type write(
+    const rclcpp::Time & time,
+    const rclcpp::Duration & period)override;
+#endif
 
 private:
   hardware_interface::return_type connect_() override;
