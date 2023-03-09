@@ -69,8 +69,6 @@ def launch_setup(context, *args, **kwargs):
             robot_description_name,
             "-entity",
             robot_namespace,
-            "-robot_namespace",
-            robot_namespace,
         ],
         output="screen",
     )

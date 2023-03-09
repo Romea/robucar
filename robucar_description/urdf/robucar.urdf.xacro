@@ -1,16 +1,20 @@
 <?xml version='1.0' encoding='utf-8'?>
 <robot name="robucar" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:arg name="prefix" default="" />
+  <xacro:arg name="prefix" default="robucar_" />
   <xacro:arg name="mode" default="simulation" />
-  <xacro:arg name="controller_conf_yaml_file" default=""/>
+  <xacro:arg name="controller_conf_yaml_file" default="" />
+  <xacro:arg name="ros_namespace" default="/robucar" />
 
   <xacro:include filename="$(find robucar_description)/urdf/robucar.xacro" />
-  <xacro:robucar mode="$(arg mode)" prefix="$(arg prefix)"/>
+  <xacro:robucar mode="$(arg mode)" prefix="$(arg prefix)" />
 
   <gazebo>
     <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-           <parameters>$(arg controller_conf_yaml_file)</parameters>
+      <parameters>$(arg controller_conf_yaml_file)</parameters>
+      <ros>
+        <namespace>$(arg ros_namespace)</namespace>
+      </ros>
     </plugin>
   </gazebo>
 
