@@ -13,7 +13,6 @@
 # limitations under the License.
 
 
-
 # import pytest
 import xml.etree.ElementTree as ET
 from robucar_description import urdf
@@ -21,9 +20,9 @@ from robucar_description import urdf
 
 def urdf_xml(mode):
     prefix = "robot_"
-    ros_namespace = "/robot"
+    ros_prefix = "/robot/"
     controller_conf_yaml_file = mode + "_controller.yaml"
-    return ET.fromstring(urdf(prefix, mode, controller_conf_yaml_file, ros_namespace))
+    return ET.fromstring(urdf(prefix, mode, controller_conf_yaml_file, ros_prefix))
 
 
 def test_footprint_link_name():
