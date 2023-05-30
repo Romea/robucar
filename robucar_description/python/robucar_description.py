@@ -22,7 +22,7 @@ def urdf(prefix, mode, base_name, controller_manager_config_yaml_file, ros_prefi
 
     ros2_control_xacro_file = (
         get_package_share_directory("robucar_description")
-        + "/urdf/ros2_control/robucar.ros2_control.urdf.xacro"
+        + "/ros2_control/robucar.ros2_control.urdf.xacro"
     )
 
     ros2_control_urdf_xml = xacro.process_file(
