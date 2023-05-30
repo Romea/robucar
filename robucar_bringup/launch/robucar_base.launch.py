@@ -25,10 +25,10 @@ from launch.conditions import (
     LaunchConfigurationEquals,
     LaunchConfigurationNotEquals,
 )
-from launch.substitutions import Command, PathJoinSubstitution, LaunchConfiguration
+from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node, SetParameter, PushRosNamespace
-from launch_ros.substitutions import FindPackageShare, ExecutableInPackage
+from launch_ros.substitutions import FindPackageShare
 from ament_index_python.packages import get_package_share_directory
 
 
@@ -37,7 +37,6 @@ def launch_setup(context, *args, **kwargs):
     mode = LaunchConfiguration("mode").perform(context)
     base_name = LaunchConfiguration("base_name").perform(context)
     robot_namespace = LaunchConfiguration("robot_namespace").perform(context)
-    urdf_description = LaunchConfiguration("urdf_description").perform(context)
 
     if robot_namespace:
         controller_manager_name = "/" + robot_namespace + "/base/controller_manager"
@@ -62,41 +61,9 @@ def launch_setup(context, *args, **kwargs):
         + "/config/mobile_base_controller.yaml"
     )
 
-    robot_description_file = "/tmp/"+robot_prefix+"description.urdf"
-    with open(robot_description_file, "w") as f:
-        f.write(urdf_description)
-
     base_ros2_control_description_file = "/tmp/"+robot_prefix+base_name+"_ros2_control.urdf"
     with open(base_ros2_control_description_file, "r") as f:
         base_ros2_control_description = f.read()
-
-    robot_description = {"robot_description": urdf_description}
-
-    robot_state_publisher = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        parameters=[robot_description],
-        output={
-            'stdout': 'log',
-            'stderr': 'log',
-        },
-    )
-
-    spawn_entity = Node(
-        condition=LaunchConfigurationEquals("mode", "simulation"),
-        package="gazebo_ros",
-        executable="spawn_entity.py",
-        arguments=[
-            "-file",
-            robot_description_file,
-            "-entity",
-            robot_namespace,
-        ],
-        output={
-            'stdout': 'log',
-            'stderr': 'log',
-        },
-    )
 
     controller_manager = Node(
         condition=LaunchConfigurationEquals("mode", "live"),
@@ -146,7 +113,6 @@ def launch_setup(context, *args, **kwargs):
             actions=[
                 SetParameter(name="use_sim_time", value=use_sim_time),
                 PushRosNamespace(robot_namespace),
-                spawn_entity,
                 PushRosNamespace(base_name),
                 controller_manager,
                 controller,
@@ -168,22 +134,6 @@ def generate_launch_description():
 
     declared_arguments.append(
         DeclareLaunchArgument("base_name", default_value="base")
-    )
-
-    urdf_description = Command(
-        [
-            ExecutableInPackage("urdf_description.py", "robucar_bringup"),
-            " robot_namespace:",
-            LaunchConfiguration("robot_namespace"),
-            " base_name:",
-            LaunchConfiguration("base_name"),
-            " mode:",
-            LaunchConfiguration("mode"),
-        ]
-    )
-
-    declared_arguments.append(
-        DeclareLaunchArgument("urdf_description", default_value=urdf_description)
     )
 
     return LaunchDescription(
