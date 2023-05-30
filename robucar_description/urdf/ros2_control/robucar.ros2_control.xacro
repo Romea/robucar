@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<robot name="robucar" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="robucar_ros2_control" params="mode prefix base_name">
+
+    <xacro:include
+      filename="$(find romea_mobile_base_description)/ros2_control/base2AS4WD.ros2_control.xacro" />
+
+    <xacro:property name="conf" value="$(find robucar_description)/config/robucar.yaml" />
+    <xacro:property name="props" value="${load_yaml(conf)}" />
+
+
+    <!-- Joint names -->
+    <xacro:property name="front_axle_steering_joint"
+      value="${props['joints']['front_axle_steering_joint_name']}" />
+    <xacro:property name="rear_axle_steering_joint"
+      value="${props['joints']['rear_axle_steering_joint_name']}" />
+    <xacro:property name="front_left_wheel_steering_joint"
+      value="${props['joints']['front_left_wheel_steering_joint_name']}" />
+    <xacro:property name="front_right_wheel_steering_joint"
+      value="${props['joints']['front_right_wheel_steering_joint_name']}" />
+    <xacro:property name="rear_left_wheel_steering_joint"
+      value="${props['joints']['rear_left_wheel_steering_joint_name']}" />
+    <xacro:property name="rear_right_wheel_steering_joint"
+      value="${props['joints']['rear_right_wheel_steering_joint_name']}" />
+    <xacro:property name="front_left_wheel_spinning_joint"
+      value="${props['joints']['front_left_wheel_spinning_joint_name']}" />
+    <xacro:property name="front_right_wheel_spinning_joint"
+      value="${props['joints']['front_right_wheel_spinning_joint_name']}" />
+    <xacro:property name="rear_left_wheel_spinning_joint"
+      value="${props['joints']['rear_left_wheel_spinning_joint_name']}" />
+    <xacro:property name="rear_right_wheel_spinning_joint"
+      value="${props['joints']['rear_right_wheel_spinning_joint_name']}" />
+
+    <!-- Geometry -->
+    <xacro:property name="wheelbase"
+      value="${props['geometry']['axles_distance']}" />
+    <xacro:property name="front_track"
+      value="${props['geometry']['front_axle']['wheels_distance']}" />
+    <xacro:property name="rear_track"
+      value="${props['geometry']['rear_axle']['wheels_distance']}" />
+    <xacro:property name="front_wheel_radius"
+      value="${props['geometry']['front_axle']['wheels']['radius']}" />
+    <xacro:property name="rear_wheel_radius"
+      value="${props['geometry']['rear_axle']['wheels']['radius']}" />
+
+
+    <!-- simulation plugins -->
+    <xacro:property name="simulation_hardware_plugin"
+      value="romea_mobile_base_gazebo/GazeboSystemInterface2AS4WD" />
+    <xacro:property name="live_hardware_plugin"
+      value="robucar_hardware/RobucarHardware" />
+
+    <xacro:base_control mode="${mode}" base_name="${base_name}" />
+
+  </xacro:macro>
+
+</robot>

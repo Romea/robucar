@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="robucar_ros2_control" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="prefix" default="aroco_" />
+  <xacro:arg name="mode" default="simulation" />
+  <xacro:arg name="base_name" default="base" />
+
+  <xacro:include filename="$(find robucar_description)/urdf/ros2_control/robucar.ros2_control.xacro" />
+
+  <xacro:robucar_ros2_control
+    mode="$(arg mode)"
+    prefix="$(arg prefix)"
+    base_name="$(arg base_name)" />
+
+</robot>

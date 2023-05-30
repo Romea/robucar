@@ -3,20 +3,22 @@
 
   <xacro:arg name="prefix" default="robucar_" />
   <xacro:arg name="mode" default="simulation" />
-  <xacro:arg name="controller_conf_yaml_file" default="" />
+  <xacro:arg name="base_name" default="base" />
+  <xacro:arg name="ros2_control_config_urdf_file" default="" />
+  <xacro:arg name="controller_manager_config_yaml_file" default="" />
   <xacro:arg name="ros_prefix" default="/robufast/" />
 
   <xacro:include filename="$(find robucar_description)/urdf/robucar.xacro" />
   <xacro:robucar mode="$(arg mode)" prefix="$(arg prefix)" />
 
   <gazebo>
-    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-      <hardware>$(arg prefix)base</hardware>
-      <robot_param_node>$(arg ros_prefix)robot_state_publisher</robot_param_node>
-      <parameters>$(arg controller_conf_yaml_file)</parameters>
+    <plugin filename="libromea_gazebo_ros2_control.so" name="gazebo_ros2_control">
+      <ros2_control_config_file>$(arg ros2_control_config_urdf_file)</ros2_control_config_file>
+      <controller_manager_config_file>$(arg controller_manager_config_yaml_file)</controller_manager_config_file>
       <ros>
-        <namespace>$(arg ros_prefix)base</namespace>
+        <namespace>$(arg ros_prefix)$(arg base_name)</namespace>
       </ros>
     </plugin>
   </gazebo>
+
 </robot>

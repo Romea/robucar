@@ -35,24 +35,28 @@ def urdf_xml(mode):
     )
 
 
+def ros2_control_urdf_xml(mode):
+    urdf_xml(mode)
+    return ET.parse("/tmp/robot_base_ros2_control.urdf")
+
+
 def test_footprint_link_name():
     assert urdf_xml("live").find("link").get("name") == "robot_base_footprint"
 
 
 def test_hardware_plugin_name():
 
-    assert urdf_xml("live").find(
+    assert ros2_control_urdf_xml("live").find(
         "ros2_control/hardware/plugin"
     ).text == "aroco_hardware/RobufastHardware"
 
-    assert urdf_xml("simulation").find(
+    assert ros2_control_urdf_xml("simulation").find(
         "ros2_control/hardware/plugin"
     ).text == "romea_mobile_base_gazebo/GazeboSystemInterface2AS4WD"
 
 
 def test_controller_filename_name():
     assert (
-        urdf_xml("simulation").find("gazebo/plugin/parameters").text
-        == get_package_share_directory("aroco_bringup")
-        + "/config/controller_manager.yaml"
+        urdf_xml("simulation").find("gazebo/plugin/controller_manager_config_file").text
+        == get_package_share_directory("aroco_bringup") + "/config/controller_manager.yaml"
     )

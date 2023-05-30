@@ -2,8 +2,6 @@
 <robot name="robucar" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:include filename="$(find romea_mobile_base_description)/urdf/base2ASxxx.chassis.xacro" />
-  <xacro:include
-    filename="$(find romea_mobile_base_description)/ros2_control/base2AS4WD.ros2_control.xacro" />
 
   <xacro:property name="conf" value="$(find robucar_description)/config/robucar.yaml" />
   <xacro:property name="props" value="${load_yaml(conf)}" />
@@ -109,10 +107,6 @@
     value="${props['geometry']['rear_axle']['wheels']['hub_carrier_offset']}" />
   <xacro:property name="chassis_height" value="${min(front_wheel_radius,rear_wheel_radius)}" />
 
-  <!-- Ros2 control hardware plugin -->
-  <xacro:property name="simulation_hardware_plugin"
-    value="romea_mobile_base_gazebo/GazeboSystemInterface2AS4WD" />
-  <xacro:property name="live_hardware_plugin" value="robucar_hardware/RobucarHardware" />
 
   <xacro:macro name="robucar" params="mode prefix">
 
@@ -129,9 +123,6 @@
       <mesh filename="package://robucar_description/meshes/wheel.dae" />
     </xacro:chassis>
 
-    <xacro:if value="${mode == 'simulation' or mode == 'live'}">
-      <xacro:base_control mode="${mode}" />
-    </xacro:if>
 
   </xacro:macro>
 
