@@ -5,7 +5,7 @@
   <xacro:arg name="mode" default="simulation" />
   <xacro:arg name="base_name" default="base" />
 
-  <xacro:include filename="$(find robucar_description)/urdf/ros2_control/robucar.ros2_control.xacro" />
+  <xacro:include filename="$(find robucar_description)/ros2_control/robucar.ros2_control.xacro" />
 
   <xacro:robucar_ros2_control
     mode="$(arg mode)"
