@@ -28,7 +28,7 @@ repositories:
     type: git
     url: git@gitlab-ssh.irstea.fr:romea_ros2/interfaces/vehicles/romea_mobile_base.git
     version: main
-  romea_ros2/interfaces/vehicles/adap2e:
+  romea_ros2/interfaces/vehicles/robucar:
     type: git
     url: git@gitlab-ssh.irstea.fr:romea_ros2/interfaces/vehicles/robucar.git
     version: main
