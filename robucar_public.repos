@@ -1,0 +1,34 @@
+repositories:
+  romea_core/romea_common:
+    type: git
+    url: https://github.com/Romea/romea-core-common.git
+    version: main
+  romea_core/romea_mobile_base:
+    type: git
+    url: https://github.com/Romea/romea-core-mobile-base.git
+    version: main
+
+  romea_ros2/tools/romea_common:
+    type: git
+    url: https://github.com/Romea/romea-ros2-common.git
+    version: main
+  romea_ros2/tools/romea_cmd_mux:
+    type: git
+    url: https://github.com/Romea/romea-ros2-cmd_mux.git
+    version: main
+  romea_ros2/interfaces/teleoperation/romea_joytick:
+    type: git
+    url: https://github.com/Romea/romea-ros2-joy.git
+    version: main
+  romea_ros2/interfaces/teleoperation/romea_teleop:
+    type: git
+    url: https://github.com/Romea/romea-ros2-teleop.git
+    version: main
+  romea_ros2/interfaces/vehicles/romea_mobile_base:
+    type: git
+    url: https://github.com/Romea/romea-ros2-mobile-base.git
+    version: main
+  romea_ros2/interfaces/vehicles/robucar:
+    type: git
+    url: https://github.com/Romea/robucar.git
+    version: main
