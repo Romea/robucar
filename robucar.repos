@@ -16,6 +16,10 @@ repositories:
     type: git
     url: git@gitlab-ssh.irstea.fr:romea_ros2/tools/romea_cmd_mux.git
     version: devel
+  romea_ros2/tools/romea_simulation:
+    type: git
+    url: git@gitlab-ssh.irstea.fr:romea_ros2/simulation/romea_simulation.git
+    version: devel
   romea_ros2/interfaces/teleoperation/romea_joytick:
     type: git
     url: git@gitlab-ssh.irstea.fr:romea_ros2/interfaces/teleoperation/romea_joy.git

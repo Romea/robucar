@@ -16,6 +16,10 @@ repositories:
     type: git
     url: https://github.com/Romea/romea-ros2-cmd_mux.git
     version: main
+  romea_ros2/tools/romea_simulation:
+    type: git
+    url: https://github.com/Romea/romea-ros2-simulation.git
+    version: main
   romea_ros2/interfaces/teleoperation/romea_joytick:
     type: git
     url: https://github.com/Romea/romea-ros2-joy.git
