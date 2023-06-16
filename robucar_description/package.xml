@@ -4,11 +4,11 @@
 
   <name>robucar_description</name>
   <version>0.0.0</version>
-  <description>Package with URDF and description files of aroco robot.</description>
+  <description>Package containg URDF and configuration files of robucar robot.</description>
 
   <maintainer email="jean.laneurit@inrae.fr">Jean Laneurit</maintainer>
 
-  <license>TODO</license>
+  <license>Apache License 2.0</license>
 
   <depend>launch</depend>
   <depend>launch_ros</depend>
