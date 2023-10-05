@@ -166,7 +166,8 @@ def generate_launch_description():
             " base_name:base",
             " mode:",
             LaunchConfiguration("mode"),
-        ]
+        ],
+        on_stderr="ignore",
     )
 
     declared_arguments.append(
