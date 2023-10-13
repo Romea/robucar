@@ -131,11 +131,10 @@ def launch_setup(context, *args, **kwargs):
 
                 IncludeLaunchDescription(
                     PythonLaunchDescriptionSource(
-                        get_package_share_directory("romea_teleop_drivers")
-                        + "/launch/teleop.launch.py"
+                        get_package_share_directory("robucar_bringup")
+                        + "/launch/robucar_teleop.launch.py"
                     ),
                     launch_arguments={
-                        "robot_type": "robucar",
                         "joystick_type": joystick_type,
                         "joystick_driver": "joy",
                         "joystick_topic": "/robufast/joystick/joy",
