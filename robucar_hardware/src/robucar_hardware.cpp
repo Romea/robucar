@@ -68,8 +68,8 @@ hardware_interface::return_type RobucarHardware::load_info_(
 hardware_interface::return_type RobucarHardware::read()
 #else
 hardware_interface::return_type RobucarHardware::read(
-  const rclcpp::Time & time,
-  const rclcpp::Duration & period)
+  const rclcpp::Time & /*time*/,
+  const rclcpp::Duration & /*period*/)
 #endif
 {
   RCLCPP_INFO(rclcpp::get_logger("RobucarHardware"), "Read data from robot");
@@ -129,8 +129,8 @@ hardware_interface::return_type RobucarHardware::read(
 hardware_interface::return_type RobucarHardware::write()
 #else
 hardware_interface::return_type RobucarHardware::write(
-  const rclcpp::Time & time,
-  const rclcpp::Duration & period)
+  const rclcpp::Time & /*time*/,
+  const rclcpp::Duration & /*period*/)
 #endif
 {
   RCLCPP_INFO(rclcpp::get_logger("RobucarHardware"), "Send command to robot");
