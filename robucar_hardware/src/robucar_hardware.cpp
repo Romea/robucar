@@ -34,6 +34,8 @@ const double WHEEL_STEERING_ANGLE_EPSILON = 0.03;
 
 namespace romea
 {
+namespace ros2
+{
 
 //-----------------------------------------------------------------------------
 RobucarHardware::RobucarHardware()
@@ -168,7 +170,7 @@ hardware_interface::return_type RobucarHardware::write(
 //-----------------------------------------------------------------------------
 void RobucarHardware::get_hardware_command_()
 {
-  HardwareCommand2AS4WD command = hardware_interface_->get_command();
+  core::HardwareCommand2AS4WD command = hardware_interface_->get_command();
 
   front_axle_steering_angle_command_ = command.frontAxleSteeringAngle;
   rear_axle_steering_angle_command_ = command.frontAxleSteeringAngle;
@@ -186,7 +188,7 @@ void RobucarHardware::get_hardware_command_()
 //-----------------------------------------------------------------------------
 void RobucarHardware::set_hardware_state_()
 {
-  HardwareState2AS4WD state;
+  core::HardwareState2AS4WD state;
 
   state.frontAxleSteeringAngle = front_axle_steering_angle_measure_;
   state.rearAxleSteeringAngle = rear_axle_steering_angle_measure_;
@@ -325,7 +327,8 @@ void RobucarHardware::write_log_data_()
 }
 #endif
 
+}  // namespace ros2
 }  // namespace romea
 
 #include "pluginlib/class_list_macros.hpp"
-PLUGINLIB_EXPORT_CLASS(romea::RobucarHardware, hardware_interface::SystemInterface)
+PLUGINLIB_EXPORT_CLASS(romea::ros2::RobucarHardware, hardware_interface::SystemInterface)

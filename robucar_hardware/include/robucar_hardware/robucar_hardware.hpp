@@ -34,6 +34,8 @@
 
 namespace romea
 {
+namespace ros2
+{
 
 class RobucarHardware : public HardwareSystemInterface2AS4WD
 {
@@ -104,6 +106,7 @@ private:
 #endif
 };
 
+}  // namespace ros2
 }  // namespace romea
 
 #endif  // ROBUCAR_HARDWARE__ROBUCAR_HARDWARE_HPP_
