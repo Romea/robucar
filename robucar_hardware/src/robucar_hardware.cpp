@@ -39,7 +39,7 @@ namespace ros2
 
 //-----------------------------------------------------------------------------
 RobucarHardware::RobucarHardware()
-: HardwareSystemInterface2AS4WD(),
+: HardwareSystemInterface2AS4WD("RobucarHardware"),
   robot_ip_("192.168.1.2"),
   pure_client_(robucar_communication::PureClient::getInstance(robot_ip_, 60000)),
   notifier_(nullptr),
@@ -49,6 +49,15 @@ RobucarHardware::RobucarHardware()
   open_log_file_();
   write_log_header_();
 #endif
+}
+
+//-----------------------------------------------------------------------------
+RobucarHardware::~RobucarHardware()
+{
+  // force deactive when interface has not been deactivated by controller manager but by ctrl-c
+  if (lifecycle_state_.id() == 3) {
+    on_deactivate(lifecycle_state_);
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -199,7 +208,7 @@ void RobucarHardware::set_hardware_state_()
     front_right_wheel_linear_speed_measure_ / front_wheel_radius_;
   state.rearLeftWheelSpinningMotion.velocity =
     rear_left_wheel_linear_speed_measure_ / rear_wheel_radius_;
-  state.frontRightWheelSpinningMotion.velocity =
+  state.rearRightWheelSpinningMotion.velocity =
     rear_right_wheel_linear_speed_measure_ / rear_wheel_radius_;
 
   hardware_interface_->set_state(state);
