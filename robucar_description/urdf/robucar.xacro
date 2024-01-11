@@ -57,38 +57,38 @@
     value="${props['joints']['rear_right_wheel_spinning_joint_name']}" />
 
   <!-- Base Properties -->
-  <xacro:property name="aabb_length" 
+  <xacro:property name="aabb_length"
     value="${props['geometry']['aabb']['length']}" />
-  <xacro:property name="aabb_width" 
+  <xacro:property name="aabb_width"
     value="${props['geometry']['aabb']['width']}" />
-  <xacro:property name="aabb_height" 
+  <xacro:property name="aabb_height"
     value="${props['geometry']['aabb']['height']}" />
-  <xacro:property name="aabb_center_x" 
+  <xacro:property name="aabb_center_x"
     value="${props['geometry']['aabb']['center'][0]}" />
-  <xacro:property name="aabb_center_y" 
+  <xacro:property name="aabb_center_y"
     value="${props['geometry']['aabb']['center'][1]}" />
-  <xacro:property name="aabb_center_z" 
+  <xacro:property name="aabb_center_z"
     value="${props['geometry']['aabb']['center'][2]}" />
 
-  <xacro:property name="wheelbase" 
+  <xacro:property name="wheelbase"
     value="${props['geometry']['axles_distance']}" />
-  <xacro:property name="front_track" 
+  <xacro:property name="front_track"
     value="${props['geometry']['front_axle']['wheels_distance']}" />
-  <xacro:property name="rear_track" 
+  <xacro:property name="rear_track"
     value="${props['geometry']['rear_axle']['wheels_distance']}" />
 
-  <xacro:property name="mass_base" 
+  <xacro:property name="mass_base"
     value="${props['inertia']['mass']}" />
-  <xacro:property name="mass_center_x" 
+  <xacro:property name="mass_center_x"
     value="${props['inertia']['center'][0]}" />
-  <xacro:property name="mass_center_y" 
+  <xacro:property name="mass_center_y"
     value="${props['inertia']['center'][1]}" />
-  <xacro:property name="mass_center_z" 
+  <xacro:property name="mass_center_z"
     value="${props['inertia']['center'][2]}" />
 
-  <xacro:property name="body_reference_x" 
+  <xacro:property name="body_reference_x"
     value="${props['control_point'][0]}" />
-  <xacro:property name="ground_clearance" 
+  <xacro:property name="ground_clearance"
     value="${props['geometry']['ground_clearance']}" />
 
   <!-- Wheel Properties -->
@@ -104,7 +104,7 @@
     value="${props['geometry']['front_axle']['wheels']['width']}" />
   <xacro:property name="rear_wheel_width"
     value="${props['geometry']['rear_axle']['wheels']['width']}" />
-  <xacro:property name="chassis_height" 
+  <xacro:property name="chassis_height"
     value="${min(front_wheel_radius,rear_wheel_radius)}" />
 
   <xacro:property name="maximal_wheel_speed"
@@ -119,9 +119,9 @@
     value="${props['axles_steering_control']['command']['maximal_angle']}" />
   <xacro:property name="maximal_wheel_steering_angle"
     value="${atan(tan(maximal_axle_steering_angle)/(1-tan(maximal_axle_steering_angle)*front_track/(2*wheelbase)))}" />
-  <xacro:property name="minimal_axle_steering_angle" 
+  <xacro:property name="minimal_axle_steering_angle"
     value="${-maximal_axle_steering_angle}" />
-  <xacro:property name="minimal_wheel_steering_angle" 
+  <xacro:property name="minimal_wheel_steering_angle"
     value="${-maximal_wheel_steering_angle}" />
 
   <xacro:property name="front_axle_steering_link_mass" value="1" />

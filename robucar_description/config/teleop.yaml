@@ -4,6 +4,6 @@ cmd_output:
 cmd_range:
   maximal_linear_speed:
     slow_mode: 1.0
-    turbo_mode : 2.0
+    turbo_mode: 2.0
   #maximal_front_steering_angle:
   #maximal_rear_steering_angle:
