@@ -2,6 +2,9 @@
 <robot name="robucar" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:include filename="$(find romea_mobile_base_description)/urdf/base2ASxxx.chassis.xacro" />
+  <xacro:include filename="$(find robucar_description)/urdf/visual/chassis.xacro" />
+  <xacro:include filename="$(find robucar_description)/urdf/visual/wheels.xacro" />
+  <xacro:include filename="$(find robucar_description)/urdf/visual/arms.xacro" />
 
   <xacro:property name="conf" value="$(find robucar_description)/config/robucar.yaml" />
   <xacro:property name="props" value="${load_yaml(conf)}" />
@@ -92,6 +95,8 @@
     value="${props['geometry']['ground_clearance']}" />
 
   <!-- Wheel Properties -->
+  <xacro:property name="front_wheel_x_offset" value="0.0" />
+  <xacro:property name="rear_wheel_x_offset" value="0.0" />
   <xacro:property name="front_hub_carrier_offset"
     value="${props['geometry']['front_axle']['wheels']['hub_carrier_offset']}" />
   <xacro:property name="rear_hub_carrier_offset"
@@ -137,20 +142,15 @@
 
   <xacro:macro name="robucar" params="mode prefix">
     <xacro:chassis>
-      <visual>
-        <origin xyz="${-body_reference_x} 0 ${chassis_height-aabb_height/2}" rpy="0 0 ${M_PI/2.0}" />
-        <geometry>
-          <mesh filename="package://robucar_description/meshes/chassis.dae" />
-        </geometry>
-      </visual>
-      <!-- visual front steering -->
-      <mesh filename="package://robucar_description/meshes/wheel_steered.dae" />
-      <!-- visual rear steering -->
-      <mesh filename="package://robucar_description/meshes/wheel_steered.dae" />
-      <!-- visual front wheel -->
-      <mesh filename="package://robucar_description/meshes/wheel.dae" />
-      <!-- visual rear wheel -->
-      <mesh filename="package://robucar_description/meshes/wheel.dae" />
+      <xacro:chassis_visual />
+      <xacro:front_left_arm_visual />
+      <xacro:front_right_arm_visual />
+      <xacro:rear_left_arm_visual />
+      <xacro:rear_right_arm_visual />
+      <xacro:front_left_wheel_visual />
+      <xacro:front_right_wheel_visual />
+      <xacro:rear_left_wheel_visual />
+      <xacro:rear_right_wheel_visual />
     </xacro:chassis>
   </xacro:macro>
 

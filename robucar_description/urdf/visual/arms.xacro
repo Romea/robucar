@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="arms">
+
+    <xacro:macro name="arm_visual" params="orientation">
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0 0 ${orientation}" />
+            <geometry>
+                <mesh filename="package://robucar_description/meshes/wheel_steered.dae" />
+            </geometry>
+            <material name=" grey">
+                <color rgba=" 0.6 0.6 0.6 1" />
+            </material>
+        </visual>
+    </xacro:macro>
+
+    <xacro:macro name="front_left_arm_visual">
+        <xacro:arm_visual orientation="${M_PI}" />
+    </xacro:macro>
+
+    <xacro:macro name="front_right_arm_visual">
+        <xacro:arm_visual orientation="0" />
+    </xacro:macro>
+
+    <xacro:macro name="rear_left_arm_visual">
+        <xacro:arm_visual orientation="${M_PI}" />
+    </xacro:macro>
+
+    <xacro:macro name="rear_right_arm_visual">
+        <xacro:arm_visual orientation="0" />
+    </xacro:macro>
+
+</robot>
