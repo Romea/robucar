@@ -46,6 +46,8 @@
 
     <xacro:property name="maximal_axle_steering_angle"
       value="${props['axles_steering_control']['command']['maximal_angle']}" />
+    <xacro:property name="maximal_wheel_steering_angle"
+      value="${atan(tan(maximal_axle_steering_angle)/(1-tan(maximal_axle_steering_angle)*front_track/(2*wheelbase)))}" />
     <xacro:property name="maximal_wheel_speed"
       value="${props['wheels_speed_control']['command']['maximal_speed']}" />
 
