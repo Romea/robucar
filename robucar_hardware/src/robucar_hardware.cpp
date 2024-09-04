@@ -14,7 +14,7 @@
 
 
 // romea
-#include <romea_mobile_base_hardware/hardware_info.hpp>
+#include "romea_mobile_base_utils/ros2_control/info/hardware_info_common.hpp"
 
 // ros
 #include <rclcpp/rclcpp.hpp>
@@ -65,8 +65,10 @@ hardware_interface::return_type RobucarHardware::load_info_(
   const hardware_interface::HardwareInfo & hardware_info)
 {
   try {
-    front_wheel_radius_ = get_parameter<double>(hardware_info, "front_wheel_radius");
-    rear_wheel_radius_ = get_parameter<double>(hardware_info, "rear_wheel_radius");
+    // front_wheel_radius_ = get_parameter<double>(hardware_info, "front_wheel_radius");
+    // rear_wheel_radius_ = get_parameter<double>(hardware_info, "rear_wheel_radius");
+    front_wheel_radius_ = get_front_wheel_radius(hardware_info);
+    rear_wheel_radius_ = get_rear_wheel_radius(hardware_info);
     return hardware_interface::return_type::OK;
   } catch (std::runtime_error & e) {
     RCLCPP_FATAL_STREAM(rclcpp::get_logger("HardwareSystemInterface"), e.what());
@@ -179,7 +181,7 @@ hardware_interface::return_type RobucarHardware::write(
 //-----------------------------------------------------------------------------
 void RobucarHardware::get_hardware_command_()
 {
-  core::HardwareCommand2AS4WD command = hardware_interface_->get_command();
+  core::HardwareCommand2AS4WD command = hardware_interface_->get_hardware_command();
 
   front_axle_steering_angle_command_ = command.frontAxleSteeringAngle;
   rear_axle_steering_angle_command_ = command.frontAxleSteeringAngle;
@@ -211,7 +213,7 @@ void RobucarHardware::set_hardware_state_()
   state.rearRightWheelSpinningMotion.velocity =
     rear_right_wheel_linear_speed_measure_ / rear_wheel_radius_;
 
-  hardware_interface_->set_state(state);
+  hardware_interface_->set_feedback(state);
 }
 
 //-----------------------------------------------------------------------------
