@@ -15,9 +15,8 @@
   <depend>ament_index_python</depend>
   <depend>xacro</depend>
 
-  <exec_depend>romea_simulation_gazebo_ros2_control</exec_depend>
-  <exec_depend>romea_mobile_base_description</exec_depend>
-  <exec_depend>romea_mobile_base_gazebo</exec_depend>
+  <exec_depend>romea_simulation</exec_depend>
+  <exec_depend>romea_mobile_base</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

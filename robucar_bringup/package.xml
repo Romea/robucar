@@ -17,9 +17,8 @@
   <depend>romea_common_bringup</depend>
   <depend>robucar_description</depend>
 
-  <exec_depend>romea_mobile_base_controllers</exec_depend>
-  <exec_depend>romea_mobile_base_description</exec_depend>
-  <exec_depend>romea_simulation_gazebo_ros2_control</exec_depend>
+  <exec_depend>romea_mobile_base</exec_depend>
+  <exec_depend>romea_simulation</exec_depend>
   <exec_depend>romea_teleop_drivers</exec_depend>
   <exec_depend>romea_joystick_bringup</exec_depend>
   <exec_depend>romea_cmd_mux</exec_depend>
