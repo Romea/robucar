@@ -1,20 +1,21 @@
-# 1 Overview #
+# robucar_description #
 
-This package contains the description of fat and slim robucar robots
+## 1 Overview ##
 
-# 2 Package organization #
+This package contains the description of fat and Robust robot and scripts to display it
+
+## 2 Package organization ##
 
 This package is organized into subdirectories as follows:
 
-  - urdf/ contains (xacro representations of) urdf descriptions of robucar robot.
+  - urdf/ contains xacro representations of Robufast robot.
 
-  - config/ contains characteristic of each robot:
+  - ros2_control/ contains urdf configuration for ros2 controller
+   
+  - config/ contains characteristics of each robot and teleop configuration 
 
-    - chassis description
-    - kinematic
-    - odometry
-    - joints and links names
+  - meshes/ contains meshes of chassis
 
-   - meshes/ constains meshes of chassis and wheels
+  - launch/ contains scripts to display the robot and test joints
 
-   - launch/ contains scripts to display robots and test joints
+  - python/ contains a Python module able to create robot urdf
