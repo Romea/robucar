@@ -187,8 +187,8 @@ void RobucarHardware::get_hardware_command_()
 {
   core::HardwareCommand2AS4WD command = hardware_interface_->get_hardware_command();
 
-  front_axle_steering_angle_command_ = command.frontAxleSteeringAngle;
-  rear_axle_steering_angle_command_ = command.frontAxleSteeringAngle;
+  front_axle_steering_angle_command_ = -command.frontAxleSteeringAngle;
+  rear_axle_steering_angle_command_ = command.rearAxleSteeringAngle;
 
   front_left_wheel_linear_speed_command_ =
     command.frontLeftWheelSpinningSetPoint * front_wheel_radius_;
