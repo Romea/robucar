@@ -1,11 +1,11 @@
 /**:
   ros__parameters:
-    update_rate: 10
+    update_rate: 100  # bug: 100 Hz corresponds to 10 Hz
     controller:
       base_frame_id: base_link
       odom_frame_id: odom
       enable_odom_tf: false
-      publish_rate: 50.0
+      publish_rate: 10.0
       timeout: 0.5
 #      command_limits:
 #        minimal_longitudinal_speed:

@@ -23,7 +23,7 @@ geometry:
 
 axles_steering_control:
   command:
-    maximal_angle: 0.2
+    maximal_angle: 0.34
     maximal_angular_speed: 1.0
   sensor:
     angle_std: 0.017453
