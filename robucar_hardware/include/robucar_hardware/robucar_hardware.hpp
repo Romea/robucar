@@ -44,7 +44,7 @@ public:
 
   RobucarHardware();
 
-  virtual ~RobucarHardware();
+  ~RobucarHardware() override;
 
   #if ROS_DISTRO == ROS_GALACTIC
   hardware_interface::return_type read()override;
@@ -53,11 +53,11 @@ public:
 #else
   hardware_interface::return_type read(
     const rclcpp::Time & time,
-    const rclcpp::Duration & period)override;
+    const rclcpp::Duration & period) override;
 
   hardware_interface::return_type write(
     const rclcpp::Time & time,
-    const rclcpp::Duration & period)override;
+    const rclcpp::Duration & period) override;
 #endif
 
 private:

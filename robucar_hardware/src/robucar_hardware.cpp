@@ -85,7 +85,7 @@ hardware_interface::return_type RobucarHardware::read(
   const rclcpp::Duration & /*period*/)
 #endif
 {
-  RCLCPP_INFO(rclcpp::get_logger("RobucarHardware"), "Read data from robot");
+  // RCLCPP_INFO(rclcpp::get_logger("RobucarHardware"), "Read data from robot");
 
   if (notifier_) {
     robucar_communication::OutboundNotificationPtr message = notifier_->pop(1000);
@@ -116,14 +116,16 @@ hardware_interface::return_type RobucarHardware::read(
 
       set_hardware_state_();
 
-      std::cout << "angles measures " <<
-        front_axle_steering_angle_measure_ << " " <<
-        rear_axle_steering_angle_measure_ << std::endl;
-      std::cout << "speeds measures " <<
-        front_left_wheel_linear_speed_measure_ << " " <<
-        front_right_wheel_linear_speed_measure_ << " " <<
-        rear_left_wheel_linear_speed_measure_ << " " <<
-        rear_right_wheel_linear_speed_measure_ << std::endl;
+      // RCLCPP_INFO_STREAM(rclcpp::get_logger("RobucarHardware"),
+      //   "angles measures: " <<
+      //   front_axle_steering_angle_measure_ << " " <<
+      //   rear_axle_steering_angle_measure_);
+      // RCLCPP_INFO_STREAM(rclcpp::get_logger("RobucarHardware"),
+      //   "speeds measures: " <<
+      //   front_left_wheel_linear_speed_measure_ << " " <<
+      //   front_right_wheel_linear_speed_measure_ << " " <<
+      //   rear_left_wheel_linear_speed_measure_ << " " <<
+      //   rear_right_wheel_linear_speed_measure_);
 
     } else {
       RCLCPP_WARN(rclcpp::get_logger("RobucarHardware"), "robot timeout.");
@@ -146,18 +148,20 @@ hardware_interface::return_type RobucarHardware::write(
   const rclcpp::Duration & /*period*/)
 #endif
 {
-  RCLCPP_INFO(rclcpp::get_logger("RobucarHardware"), "Send command to robot");
+  // RCLCPP_INFO(rclcpp::get_logger("RobucarHardware"), "Send command to robot");
 
   get_hardware_command_();
-  std::cout << "angles command " <<
-    front_axle_steering_angle_command_ << " " <<
-    rear_axle_steering_angle_command_ << std::endl;
-  std::cout << "speeds command" <<
-    front_left_wheel_linear_speed_command_ << " " <<
-    front_right_wheel_linear_speed_command_ << " " <<
-    rear_left_wheel_linear_speed_command_ << " " <<
-    rear_right_wheel_linear_speed_command_ << std::endl;
-  std::cout << " is_drive_enable()" << is_drive_enable() << std::endl;
+  // RCLCPP_INFO_STREAM(rclcpp::get_logger("RobucarHardware"),
+  //   "angle commands: " <<
+  //   front_axle_steering_angle_command_ << " " <<
+  //   rear_axle_steering_angle_command_);
+  // RCLCPP_INFO_STREAM(rclcpp::get_logger("RobucarHardware"),
+  //   "linear speeds: " <<
+  //   front_left_wheel_linear_speed_command_ << " " <<
+  //   front_right_wheel_linear_speed_command_ << " " <<
+  //   rear_left_wheel_linear_speed_command_ << " " <<
+  //   rear_right_wheel_linear_speed_command_);
+  // RCLCPP_INFO_STREAM(rclcpp::get_logger("RobucarHardware"), "drive enabled: " << is_drive_enable());
 
   robucar_communication::CommandPureDrive drive(is_drive_enable());
   drive.setFrontSteering(front_axle_steering_angle_command_);
