@@ -4,5 +4,5 @@ include:
 
 
 variables:
-  PKGS_TO_BUILD_TEST: "robucat_bringup robucar_description robucar_hardware"
+  PKGS_TO_BUILD_TEST: "robucar_bringup robucar_description robucar_hardware"
   ROS_DISTRO_TO_TEST: "humble"
