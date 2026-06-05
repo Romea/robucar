@@ -18,9 +18,6 @@ repositories:
   romea_ros2/interfaces/teleoperation/romea_joytick:
     type: git
     url: git@forge.inrae.fr:romea_ros2/interfaces/teleoperation/romea_joy.git
-  romea_ros2/interfaces/teleoperation/romea_teleop:
-    type: git
-    url: git@forge.inrae.fr:romea_ros2/interfaces/teleoperation/romea_teleop.git
   romea_ros2/interfaces/vehicles/romea_mobile_base:
     type: git
     url: git@forge.inrae.fr:romea_ros2/interfaces/vehicles/romea_mobile_base.git

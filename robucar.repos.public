@@ -24,10 +24,6 @@ repositories:
     type: git
     url: https://github.com/Romea/romea-ros2-joy.git
     version: main
-  romea_ros2/interfaces/teleoperation/romea_teleop:
-    type: git
-    url: https://github.com/Romea/romea-ros2-teleop.git
-    version: main
   romea_ros2/interfaces/vehicles/romea_mobile_base:
     type: git
     url: https://github.com/Romea/romea-ros2-mobile-base.git
