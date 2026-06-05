@@ -14,21 +14,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 import sys
 
 from robucar_bringup import generate_urdf_description
 from romea_common_meta_bringup.utils import complete_mode, robot_prefix, robot_urdf_prefix
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     parameters = {}
     for argument in sys.argv[1:]:
         name, value = argument.split(":")
         parameters[name] = value
 
     mode = complete_mode(parameters["mode"])
-    base_name = parameters.get("base_name", "base")
+    base_name = parameters["base_name"]
     prefix = robot_urdf_prefix(parameters["robot_namespace"])
     ros_prefix = robot_prefix(parameters["robot_namespace"])
     print(generate_urdf_description(prefix, mode, base_name, ros_prefix))

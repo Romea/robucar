@@ -5,7 +5,8 @@
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0 0 ${orientation}" />
             <geometry>
-                <mesh filename="package://robucar_description/meshes/wheel_steered.dae" />
+                <!-- <mesh filename="package://robucar_description/meshes/wheel_steered.dae" /> -->
+                <mesh filename="$(find robucar_description)/meshes/wheel_steered.dae" />
             </geometry>
             <material name=" grey">
                 <color rgba=" 0.6 0.6 0.6 1" />

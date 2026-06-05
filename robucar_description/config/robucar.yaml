@@ -45,7 +45,7 @@ inertia:
 control_point: [-0.6, 0.0, 0.0]
 
 joints:
-  base_footprint_joint_name: base_footprint
+  base_footprint_joint_name: base_footprint_joint
   inertial_joint_name: inertial_joint
   front_axle_steering_joint_name: front_axle_steering_joint
   rear_axle_steering_joint_name: rear_axle_steering_joint

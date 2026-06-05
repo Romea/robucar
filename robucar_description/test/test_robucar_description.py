@@ -12,23 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-# import pytest
 import xml.etree.ElementTree as ET
-from robucar_description import urdf
+
+from robucar_description import (
+    generate_ros2_control_description,
+    generate_urdf_description,
+)
 
 
 def urdf_xml(mode):
-    prefix = "robot_"
-    ros_prefix = "/robot/"
-    base_name = "base"
-    controller_conf_yaml_file = mode + "_controller.yaml"
-    return ET.fromstring(urdf(prefix, mode, base_name, controller_conf_yaml_file, ros_prefix))
+    return ET.fromstring(
+        generate_urdf_description(
+            "robot_", mode, "base", "controller_manager.yaml", "/robot/"
+        )
+    )
 
 
-def ros2_control_urdf_xml(mode):
-    urdf_xml(mode)
-    return ET.parse("/tmp/robot_base_ros2_control.urdf")
+def ros2_control_xml(mode):
+    return ET.fromstring(generate_ros2_control_description("robot_", mode, "base"))
 
 
 def test_footprint_link_name():
@@ -36,18 +37,19 @@ def test_footprint_link_name():
 
 
 def test_hardware_plugin_name():
+    assert (
+        ros2_control_xml("live").find("ros2_control/hardware/plugin").text
+        == "robucar_hardware/RobucarHardware"
+    )
 
-    assert ros2_control_urdf_xml("live").find(
-        "ros2_control/hardware/plugin"
-    ).text == "robucar_hardware/RobucarHardware"
-
-    assert ros2_control_urdf_xml("simulation").find(
-        "ros2_control/hardware/plugin"
-    ).text == "romea_mobile_base_gazebo/GazeboSystemInterface2AS4WD"
+    assert (
+        ros2_control_xml("simulation").find("ros2_control/hardware/plugin").text
+        == "romea_mobile_base_gazebo/GazeboSystemInterface2AS4WD"
+    )
 
 
 def test_controller_filename_name():
     assert (
-        urdf_xml("simulation").find("gazebo/plugin/controller_manager_config_file").text
-        == "simulation_controller.yaml"
+        urdf_xml("simulation").find("gazebo/plugin/parameters").text
+        == "controller_manager.yaml"
     )

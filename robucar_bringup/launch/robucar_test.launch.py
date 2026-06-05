@@ -12,117 +12,64 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-import yaml
+from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-
-from launch.actions import (
-    IncludeLaunchDescription,
-    DeclareLaunchArgument,
-    OpaqueFunction,
-    GroupAction,
-)
-
-from launch.substitutions import Command, PathJoinSubstitution, LaunchConfiguration
+from launch.actions import GroupAction, IncludeLaunchDescription, OpaqueFunction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node, PushRosNamespace
-from launch_ros.substitutions import FindPackageShare, ExecutableInPackage
-from ament_index_python.packages import get_package_share_directory
+
+import romea_common_meta_bringup.ros_launch as common
+import romea_joystick_meta_bringup.ros_launch as joystick
 
 
 def launch_setup(context, *args, **kwargs):
+    mode = common.get_mode(context)
 
-    mode = LaunchConfiguration("mode").perform(context)
-    joystick_type = LaunchConfiguration("joystick_type").perform(context)
-    joystick_device = LaunchConfiguration("joystick_device").perform(context)
-    robot_urdf_description = LaunchConfiguration("robot_urdf_description").perform(context)
+    joystick_configuration_file_path = (
+        get_package_share_directory("romea_joystick_utils")
+        + "/config/" + joystick.get_joystick_model(context) + ".yaml"
+    )
 
     robot = []
 
-    if mode == "simulation":
-
-        world = PathJoinSubstitution(
-            [
-                FindPackageShare("romea_simulation_gazebo_worlds"),
-                "worlds",
-                "friction_cone.world",
-            ]
-        )
-
+    if "simulation" in mode:
         robot.append(
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(
-                    [
-                        PathJoinSubstitution(
-                            [
-                                FindPackageShare("gazebo_ros"),
-                                "launch",
-                                "gzserver.launch.py",
-                            ]
-                        )
-                    ]
+                    get_package_share_directory("robucar_bringup")
+                    + "/launch/robucar_gazebo.launch.py"
                 ),
-                launch_arguments={"world": world, "verbose": "false"}.items(),
+                launch_arguments={
+                    "mode": mode,
+                    "robot_namespace": "robufast",
+                    "base_name": "base",
+                }.items(),
             )
         )
 
-        robot.append(
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(
-                    [
-                        PathJoinSubstitution(
-                            [
-                                FindPackageShare("gazebo_ros"),
-                                "launch",
-                                "gzclient.launch.py",
-                            ]
-                        )
-                    ]
-                )
-            )
-        )
-
-        robot_description_file = "/tmp/robufast_description.urdf"
-        with open(robot_description_file, "w") as f:
-            f.write(robot_urdf_description)
-
-        robot.append(
-            Node(
-                package="gazebo_ros",
-                executable="spawn_entity.py",
-                arguments=[
-                    "-file",
-                    robot_description_file,
-                    "-entity",
-                    "robufast",
-                ],
-                output={
-                    'stdout': 'log',
-                    'stderr': 'log',
-                },
-            )
-        )
-
-    robot.append(
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                [
-                    PathJoinSubstitution(
-                        [
-                            FindPackageShare("robucar_bringup"),
-                            "launch",
-                            "robucar_base.launch.py",
-                        ]
-                    )
-                ]
-            ),
-            launch_arguments={"mode": mode}.items(),
-        )
+    base = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            get_package_share_directory("robucar_bringup")
+            + "/launch/robucar_base.launch.py"
+        ),
+        launch_arguments={
+            "mode": mode,
+            "robot_namespace": "robufast",
+            "base_name": "base",
+        }.items(),
     )
 
-    teleop_configuration_file_path = (
-        get_package_share_directory("robucar_description") + "/config/teleop.yaml"
+    teleop = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            get_package_share_directory("robucar_bringup")
+            + "/launch/robucar_teleop.launch.py"
+        ),
+        launch_arguments={
+            "mode": mode,
+            "joystick_configuration_file_path": joystick_configuration_file_path,
+            "joystick_topic": "/robufast/joystick/joy",
+        }.items(),
     )
 
     robot.append(
@@ -130,56 +77,18 @@ def launch_setup(context, *args, **kwargs):
             actions=[
                 PushRosNamespace("robufast"),
                 PushRosNamespace("base"),
-
-                IncludeLaunchDescription(
-                    PythonLaunchDescriptionSource(
-                        get_package_share_directory("robucar_bringup")
-                        + "/launch/robucar_teleop.launch.py"
-                    ),
-                    launch_arguments={
-                        "joystick_type": joystick_type,
-                        "joystick_driver": "joy",
-                        "joystick_topic": "/robufast/joystick/joy",
-                        "teleop_configuration_file_path": teleop_configuration_file_path,
-                    }.items(),
-                )
+                base,
+                teleop,
             ]
         )
     )
-
-    joy_params_path = '/tmp/joy_parameters.yaml'
-    joy_params = {
-        'dead_zone': 0.05,
-        'autorepeat_rate': 10.0,
-        'frame_id': 'joy',
-    }
-    with open(joy_params_path, 'w') as file:
-        file.write(yaml.safe_dump(joy_params))
 
     robot.append(
         GroupAction(
             actions=[
                 PushRosNamespace("robufast"),
                 PushRosNamespace("joystick"),
-
-                IncludeLaunchDescription(
-                    PythonLaunchDescriptionSource(
-                        [
-                            PathJoinSubstitution(
-                                [
-                                    FindPackageShare("romea_joystick_bringup"),
-                                    "launch",
-                                    "drivers/joy.launch.py",
-                                ]
-                            )
-                        ]
-                    ),
-                    launch_arguments={
-                        'executable': 'joy_node',
-                        'config_path': joy_params_path,
-                        'frame_id': joy_params['frame_id'],
-                    }.items(),
-                )
+                Node(package="joy", executable="joy_node"),
             ]
         )
     )
@@ -188,34 +97,10 @@ def launch_setup(context, *args, **kwargs):
 
 
 def generate_launch_description():
-
-    declared_arguments = []
-
-    declared_arguments.append(DeclareLaunchArgument("mode", default_value="simulation"))
-
-    urdf_description = Command(
-        [
-            ExecutableInPackage("urdf_description.py", "robucar_bringup"),
-            " robot_namespace:robufast",
-            " base_name:base",
-            " mode:",
-            LaunchConfiguration("mode"),
-        ],
-        on_stderr="ignore",
-    )
-
-    declared_arguments.append(
-        DeclareLaunchArgument("robot_urdf_description", default_value=urdf_description)
-    )
-
-    declared_arguments.append(
-        DeclareLaunchArgument("joystick_type", default_value="xbox")
-    )
-
-    declared_arguments.append(
-        DeclareLaunchArgument("joystick_device", default_value="/dev/input/js0")
-    )
-
     return LaunchDescription(
-        declared_arguments + [OpaqueFunction(function=launch_setup)]
+        [
+            common.declare_mode("simulation"),
+            joystick.declare_joystick_model("microsoft_xbox"),
+            OpaqueFunction(function=launch_setup),
+        ]
     )

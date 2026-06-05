@@ -6,7 +6,9 @@
             <origin xyz="${-body_reference_x} 0 ${chassis_height-aabb_height/2}"
                 rpy="0 0 ${M_PI/2.0}" />
             <geometry>
-                <mesh filename="package://robucar_description/meshes/chassis.dae" />
+                <!-- <mesh filename="package://robucar_description/meshes/chassis.dae" /> -->
+                <mesh filename="file://$(find robucar_description)/meshes/chassis.dae" />
+               
             </geometry>
         </visual>
     </xacro:macro>
