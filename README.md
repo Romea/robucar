@@ -1,38 +1,34 @@
-# robucar #
+# robucar
 
-This project contains several ROS2 packages for working with Robucar robot also called Robufast, both in real-world applications and simulations. For more detailed information, please refer to the README files of each individual package.
+## Overview
 
-## **Usage**
+`robucar` groups the ROS2 packages that describe, launch and control the Robucar mobile base, also called Robufast, in live and simulation modes.
 
-1. create a ROS workspace
-2. cd worskpace
-3. mkdir src
-4. wget https://raw.githubusercontent.com/Romea/robucar/refs/heads/main/robucar_public.repos
-5. vcs import src < robucar_public.repos
-6. colcon build
-7. see bringup package to launch Robufast robot
+This repository-level README gives a map of the stack. Detailed information about each package can be found in the corresponding package README.
 
-## **Contributing**
+## Packages
 
-If you'd like to contribute to this project, here are some guidelines:
+| Package | Role |
+| --- | --- |
+| `robucar` | Metapackage that groups the Robucar ROS2 packages. |
+| `robucar_description` | Robot-specific description layer for Robucar, including configuration files, URDF/Xacro descriptions, meshes and ros2_control descriptions. |
+| `robucar_bringup` | Main integration entry point for generating Robucar configuration files, URDF descriptions, ros2_control descriptions and launch files. |
+| `robucar_hardware` | Live `ros2_control` hardware plugin for the Robucar mobile base, built on the generic `2AS4WD` hardware abstraction. |
 
-1. Fork the repository.
-2. Create a new branch for your changes.
-3. Make your changes.
-4. Write tests to cover your changes.
-5. Run the tests to ensure they pass.
-6. Commit your changes.
-7. Push your changes to your forked repository.
-8. Submit a pull request.
+## Usage
 
-## **License**
+In most cases, start with `robucar_bringup`. It is the user-facing entry point of the stack and the package used by `romea_mobile_base_meta_bringup` when a Robucar model is selected from a mobile base meta-description.
 
-This project is released under the Apache License 2.0. See the LICENSE file for details.
+The Robucar stack is a robot-specific specialization of `romea_mobile_base`. The mobile base architecture is `2AS4WD`; `robucar_description` provides the concrete geometry and generated descriptions, `robucar_hardware` provides the live hardware implementation, and `robucar_bringup` connects these pieces to the generic mobile base launch workflow.
 
-## **Authors**
+## License
 
- Robucar project was developed by **Jean Laneurit** in the context of BAUDET ROB ANR project.
+This project is released under the Apache License 2.0. See the `LICENSE` file for details.
 
-## **Contact**
+## Authors
 
-If you have any questions or comments about Robucar project, please contact **[Jean Laneurit](mailto:jean.laneurit@inrae.fr)** 
+The `robucar` project was developed by Jean Laneurit in the context of the BAUDET ROB ANR project.
+
+## Contact
+
+For questions or comments about this project, please contact [Jean Laneurit](mailto:jean.laneurit@inrae.fr).
