@@ -74,7 +74,7 @@
     <xacro:if value="${mode ==  'live'}">
       <xacro:property
         name="hardware_plugin"
-        value="robucar_hardware/robucar_hardware" />
+        value="robucar_hardware/RobucarHardware" />
     </xacro:if>
 
     <xacro:base_control
