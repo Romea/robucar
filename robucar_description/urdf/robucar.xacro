@@ -142,7 +142,9 @@
 
   <xacro:macro name="robucar" params="mode prefix">
     <xacro:chassis>
-      <xacro:chassis_visual />
+      <chassis_visuals>
+        <xacro:chassis_visual />
+      </chassis_visuals>
       <xacro:front_left_arm_visual />
       <xacro:front_right_arm_visual />
       <xacro:rear_left_arm_visual />
