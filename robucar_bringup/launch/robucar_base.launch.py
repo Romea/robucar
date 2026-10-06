@@ -51,13 +51,7 @@ def launch_setup(context, *args, **kwargs):
         package="romea_common_meta_bringup",
         executable="urdf_broadcaster_node",
         name="ros2_control_description",
-        parameters=[
-            {
-                "robot_description": utils.complete_robot_description(
-                    robot_urdf_description, [robot_ros2_control_description]
-                )
-            }
-        ],
+        parameters=[{"robot_description": robot_ros2_control_description}]
     )
 
     controller_manager = Node(
