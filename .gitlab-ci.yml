@@ -4,5 +4,6 @@ include:
 
 
 variables:
+  ROS_HUMBLE_IMAGE: "osrf/ros:humble-desktop-full-jammy"
+  ROS_JAZZY_IMAGE: "osrf/ros:jazzy-desktop-full-noble"
   PKGS_TO_BUILD_TEST: "robucar_bringup robucar_description robucar_hardware"
-  ROS_DISTRO_TO_TEST: "humble"
